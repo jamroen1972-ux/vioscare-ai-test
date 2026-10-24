@@ -114,6 +114,66 @@ body{font-size:16px;color:#17392b;background:#f1f6f2}
 /* v1.5 — requested behavior and certificate fixes */
 .menu-backdrop{display:none}body.menu-open:after{display:none!important}.profile-photo-box img[hidden]{display:none!important}.profile-photo-box img{width:130px;height:130px;border-radius:50%;object-fit:cover;background:transparent;display:block}.cert-contact:has(.cert-qr){grid-template-columns:1fr auto}.cert-qr{min-width:0;min-height:0;padding:0;border:0;border-radius:0;background:transparent;display:flex;align-items:center;justify-content:center}.cert-qr img{display:block;width:120px;height:120px;object-fit:contain}.cert-label,.cert-value{min-width:0;overflow-wrap:anywhere;word-break:normal}.cert-row{align-items:start;min-height:0;line-height:1.45}.cert-label{line-height:1.45}.share-qr{display:flex;justify-content:center;align-items:center;margin:22px auto 4px}.share-qr img{display:block;width:140px;height:140px;object-fit:contain}@media(max-width:680px){.mobile-head{grid-template-columns:32px minmax(0,1fr)!important}.mobile-brand{justify-content:center}body.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:rgba(12,35,25,.35);z-index:4;border:0;padding:0}.sidebar{z-index:5}.cert-contact:has(.cert-qr){grid-template-columns:minmax(0,1fr) 78px}.cert-qr img{width:76px;height:76px}.profile-photo-box img{width:130px;height:130px}}
 </style>
+<style id="fan-header-footer-redesign">
+/* Match the supplied home-page reference with a fresh fan photo and a three-part shop footer. */
+.hero-banner{background-image:linear-gradient(90deg,rgba(230,249,240,.96) 0%,rgba(239,249,244,.9) 34%,rgba(239,249,244,.08) 72%),url("fan-hero-banner-wide.png")!important;background-size:cover!important;background-position:center right!important}
+.hero-slogan{position:absolute;z-index:1;right:3%;top:14%;text-align:center;color:#075743;font-style:italic;transform:rotate(-5deg);text-shadow:0 1px 8px rgba(255,255,255,.8);pointer-events:none}
+.hero-slogan strong{font-size:18px;line-height:1.15}.hero-slogan small{display:block;font-size:10px;font-weight:750;margin-top:5px}
+.footer-qr-empty{display:flex;min-height:95px;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.footer-qr-empty span{display:grid;place-items:center;width:45px;height:45px;border-radius:14px;background:#06c755;color:white;font-size:12px;font-weight:900;box-shadow:0 3px 10px rgba(0,150,70,.2)}
+.footer-qr-empty small{font-size:8px;line-height:1.3;color:#315445;font-weight:800}
+.footer-qr img[hidden],.footer-qr-empty[hidden],.footer-qr-caption[hidden]{display:none!important}
+.footer-qr>small{font-size:8px;line-height:1.3;font-weight:800;white-space:nowrap}
+.business-footer{position:relative;overflow:hidden}
+.business-footer:after{content:"";position:absolute;right:-45px;bottom:-110px;width:220px;height:170px;border-radius:50%;background:rgba(91,206,151,.13);pointer-events:none}
+.footer-owner,.footer-contact,.footer-qr{position:relative;z-index:1}
+/* Shared mobile shop header: remains consistent across every app section. */
+@media(max-width:680px){
+  .hero-banner{min-height:232px!important;padding:20px 15px!important;background-image:linear-gradient(90deg,rgba(230,249,240,.96) 0%,rgba(239,249,244,.86) 36%,rgba(239,249,244,.04) 78%),url("fan-hero-banner.png")!important;background-size:cover!important;background-position:center center!important}
+  .hero-copy{max-width:59%!important}
+  .hero-copy .eyebrow{font-size:10px!important;line-height:1.4}
+  .hero-copy h2{font-size:24px!important;line-height:1.2}
+  .hero-copy p{font-size:11px!important;line-height:1.5}
+  .hero-slogan{right:2%;top:11%;max-width:28%}
+  .hero-slogan strong{font-size:12px;line-height:1.2}.hero-slogan small{font-size:7px;margin-top:3px}
+  .mobile-head{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;align-items:center;min-height:88px!important;padding:10px 14px!important;margin:0 -13px 12px!important;gap:8px!important;background:#fff!important;border-bottom:1px solid #e3eee8;box-shadow:0 3px 12px rgba(7,74,49,.08)}
+  .mobile-head .hamburger{width:40px;height:44px;padding:0;border:0;background:transparent;color:#075b43;font-size:0;display:grid;place-items:center}
+  .mobile-head .hamburger:before{content:"☰";font-size:29px;line-height:1}
+  .mobile-brand{min-width:0;justify-content:center!important;gap:9px!important}
+  .mobile-brand .brandmark{width:46px!important;height:46px!important;flex:0 0 46px!important;font-size:0!important}
+  .mobile-brand .brandmark svg{width:38px;height:38px}
+  .mobile-brand strong{display:block;font-size:18px!important;line-height:1.25;white-space:nowrap;letter-spacing:-.35px}
+  .mobile-brand small{font-size:11px!important;line-height:1.4;white-space:nowrap;margin-top:2px}
+  .business-footer{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) auto!important;align-items:center!important;gap:10px!important;margin:18px -13px 0!important;padding:16px 12px!important;border-radius:0!important;background:linear-gradient(125deg,#064a38,#087b55)!important;color:#fff;box-shadow:none!important}
+  .footer-owner{display:flex;align-items:center;gap:7px;min-width:0}
+  .footer-owner-icon{width:34px;height:34px;flex:0 0 34px;border:2px solid rgba(255,255,255,.88);border-radius:50%;display:grid;place-items:center;font-size:22px;line-height:1}
+  .footer-owner small{display:block;font-size:9px!important;line-height:1.35;opacity:.88}
+  .footer-owner strong{display:block;font-size:12px!important;line-height:1.4;overflow-wrap:anywhere}
+  .footer-contact{min-width:0;font-size:9px;line-height:1.55}
+  .footer-contact a{display:block;color:#fff;text-decoration:none;white-space:nowrap;font-weight:700}
+  .footer-contact a span,.footer-address>span:first-child{font-size:13px;margin-right:2px}
+  .footer-address{display:flex;align-items:flex-start;gap:4px;opacity:.92}
+  .footer-address #footerAddress{overflow-wrap:anywhere}
+  .footer-qr{width:76px;padding:5px 4px 4px;border-radius:9px;background:#fff;color:#14543e;text-align:center;box-sizing:border-box}
+  .footer-qr img{display:block;width:66px;height:66px;object-fit:contain;margin:0 auto 3px}
+  .footer-qr small{display:block;font-size:7px;line-height:1.3;font-weight:800;white-space:nowrap}
+  .footer-quote{margin:0 -13px!important;padding:10px 8px!important;background:#edfaf3!important;color:#155f44!important;font-size:10px!important;line-height:1.5}
+}
+@media(min-width:681px){
+  .business-footer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) auto;align-items:center}
+  .footer-owner{display:flex;align-items:center;gap:12px}
+  .footer-owner-icon{width:46px;height:46px;flex:0 0 46px;border:2px solid rgba(255,255,255,.9);border-radius:50%;display:grid;place-items:center;font-size:29px}
+  .footer-owner small{display:block;font-size:11px;line-height:1.5;opacity:.88}
+  .footer-owner strong{display:block;font-size:17px;line-height:1.45}
+  .footer-contact{font-size:13px;line-height:1.65}
+  .footer-contact a{display:block;color:#fff;text-decoration:none;font-weight:700}
+  .footer-address{display:flex;gap:6px;align-items:flex-start}
+  .footer-qr{width:120px;padding:8px 7px 6px;border-radius:12px;background:#fff;color:#14543e;text-align:center;box-sizing:border-box}
+  .footer-qr img{display:block;width:104px;height:104px;object-fit:contain;margin:0 auto 5px}
+  .footer-qr small{font-size:10px;font-weight:800;white-space:nowrap}
+}
+.business-footer[hidden],.footer-quote[hidden]{display:none!important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -141,7 +201,7 @@ body{font-size:16px;color:#17392b;background:#f1f6f2}
   <div class="topbar"><div class="crumb">ระบบจัดการร้าน / <b id="crumbName">ภาพรวม</b></div><div class="account"><div class="avatar">จ</div><div><span>เจ้าของร้าน</span><small>ระบบบันทึกงานพัดลม</small></div></div></div>
   <section class="page-section active" id="page-overview">
     <div class="hero-banner">
-      <div class="hero-copy"><div class="eyebrow">พัดลมดี ป่าบอน · ซ่อม · ประกอบ · ขาย · รับประกัน</div><h2>สวัสดีครับ<br><em>คุณจำเริญ</em></h2><p>ดูแลพัดลม ให้ลมดี ใช้งานได้นาน<br>บริการด้วยความจริงใจครับ</p></div>
+      <div class="hero-copy"><div class="eyebrow">พัดลมดี ป่าบอน · ซ่อม · ประกอบ · ขาย · รับประกัน</div><h2>สวัสดีครับ<br><em>คุณจำเริญ</em></h2><p>ดูแลพัดลม ให้ลมดี ใช้งานได้นาน<br>บริการด้วยความจริงใจครับ</p></div><div class="hero-slogan"><strong>ลมดี<br>ใช้งานได้นาน</strong><small>ต้อง… พัดลมดี ป่าบอน</small></div>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-top">ยอดขายที่บันทึก <span class="stat-ico ic-green">฿</span></div><div class="stat-num" id="statRevenue">฿ 0</div><div class="stat-foot"><b>ยอดรวมทุกรายการขาย</b></div></div>
@@ -217,7 +277,7 @@ body{font-size:16px;color:#17392b;background:#f1f6f2}
   <div class="panel profile-panel"><div class="profile-photo-box"><img id="profilePhotoPreview" alt="รูปโปรไฟล์ร้าน" hidden><label class="btn btn-small btn-soft" for="profilePhotoInput">เลือกรูปโปรไฟล์</label><input id="profilePhotoInput" type="file" accept="image/*" hidden></div>
   <form id="profileForm" class="form profile-form"><div class="form-grid"><div class="field"><label>ชื่อร้าน</label><input name="shopName" value="พัดลมดี ป่าบอน"></div><div class="field"><label>ชื่อเจ้าของร้าน</label><input name="owner" value="จำเริญ สุวรรณพุ่ม"></div><div class="field"><label>เบอร์โทรศัพท์</label><input name="phone1" value="081-2548-297"></div><div class="field"><label>เบอร์โทรศัพท์สำรอง</label><input name="phone2" value="085-821-1580"></div><div class="field full"><label>ที่อยู่ร้าน</label><input name="address" value="164/1 หมู่ 7 ต.ป่าบอน อ.ป่าบอน จ.พัทลุง 93170"></div><div class="field full"><label>ลิงก์ LINE ร้าน</label><input name="lineUrl" type="url" placeholder="ลิงก์ LINE สำหรับใบรับประกัน"></div><div class="field full"><label>รูป QR LINE (แสดงในใบรับประกันและหน้าที่แชร์)</label><input id="qrPhotoInput" type="file" accept="image/*"></div></div><div class="form-actions"><button class="btn btn-primary" type="submit">บันทึกโปรไฟล์ร้าน</button></div></form></div>
 </section>
-<div class="business-footer"><div><strong id="footerShopName">เจ้าของร้าน · จำเริญ สุวรรณพุ่ม</strong><small id="footerShopTag">พัดลมดี ป่าบอน · ซ่อม • ประกอบ • ขาย • รับประกัน</small></div><div><small><a id="footerPhone1" href="tel:0812548297">โทร 081-2548-297</a> · <a id="footerPhone2" href="tel:0858211580">085-821-1580</a><br><span id="footerAddress">164/1 หมู่ 7 ต.ป่าบอน อ.ป่าบอน จ.พัทลุง 93170</span></small></div></div><div class="footer-quote">🍃 “บริการด้วยความจริงใจ ให้พัดลมทุกตัวมีลมอีกครั้ง” 🍃</div>
+<div class="business-footer" id="businessFooter"><div class="footer-owner"><span class="footer-owner-icon" aria-hidden="true">♙</span><div><small>เจ้าของร้าน</small><strong id="footerShopName">จำเริญ สุวรรณพุ่ม</strong><small id="footerShopTag">พัดลมดี ป่าบอน · ซ่อม • ประกอบ • ขาย • รับประกัน</small></div></div><div class="footer-contact"><a id="footerPhone1" href="tel:0812548297"><span aria-hidden="true">☎</span> 081-2548-297</a><a id="footerPhone2" href="tel:0858211580"><span aria-hidden="true">☎</span> 085-821-1580</a><div class="footer-address"><span aria-hidden="true">⌖</span><span id="footerAddress">164/1 หมู่ 7 ต.ป่าบอน อ.ป่าบอน จ.พัทลุง 93170</span></div></div><div class="footer-qr" id="footerQrWrap"><img id="footerQrImage" alt="QR Code LINE ร้าน" hidden><div class="footer-qr-empty" id="footerQrEmpty"><span>LINE</span><small>เพิ่ม QR ที่โปรไฟล์ร้าน</small></div><small id="footerQrCaption" hidden>สแกนเพื่อเพิ่มเพื่อน LINE</small></div></div><div class="footer-quote" id="footerQuote">🍃 “บริการด้วยความจริงใจ ให้พัดลมทุกตัวมีลมอีกครั้ง” 🍃</div>
 </main>
 <nav class="mobile-nav" id="mobileNav">
   <button class="active" data-page="overview"><span>▦</span>ภาพรวม</button><button data-page="sales"><span>🌀</span>ขาย</button><button data-page="repairs"><span>🔧</span>ซ่อม</button><button data-page="customers"><span>♙</span>ลูกค้า</button><button data-page="reports"><span>▤</span>รายงาน</button>
@@ -280,7 +340,7 @@ function showPage(name){
  document.getElementById('page-'+name).classList.add('active');
  document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
  const names={overview:'ภาพรวม',sales:'รายการขาย',repairs:'งานซ่อม / เคลม',customers:'ลูกค้า',reports:'รายงาน',inventory:'สต๊อกสินค้า / อะไหล่',listings:'หน้าประกาศขาย',profile:'โปรไฟล์ร้าน'};
- document.getElementById('crumbName').textContent=names[name];
+ document.getElementById('crumbName').textContent=names[name];document.getElementById('businessFooter').hidden=name!=='overview';document.getElementById('footerQuote').hidden=name!=='overview';
  if(name==='sales')renderSales();if(name==='repairs')renderRepairs();if(name==='customers')renderCustomers();if(name==='reports')renderReports();if(name==='inventory')renderInventory();if(name==='listings')renderListings();if(name==='profile')renderProfile();
  window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -363,7 +423,7 @@ async function shareListing(id){const x=db.listings.find(i=>i.id===id);if(!x)ret
 function shareFacebook(id){const x=db.listings.find(i=>i.id===id);if(x)window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(publicLink(x)),'_blank','noopener')}
 async function shareShop(){const rows=db.listings.filter(x=>x.status!=='ขายแล้ว').map(x=>sharePayload(x));const payload=btoa(unescape(encodeURIComponent(JSON.stringify({shop:db.profile.shopName,items:rows,qrPhoto:db.profile.qrPhoto||'',lineUrl:db.profile.lineUrl||''}))));const url=location.origin+location.pathname+'?shop='+encodeURIComponent(payload);if(navigator.share){try{await navigator.share({title:db.profile.shopName,text:'รายการพัดลมพร้อมขาย',url})}catch{}}else{await navigator.clipboard?.writeText(url);toast('คัดลอกลิงก์หน้าร้านแล้ว')}}
 function showSharedPage(){const params=new URLSearchParams(location.search),raw=params.get('share'),shopRaw=params.get('shop'),box=document.getElementById('publicSharePage'),qrBlock=src=>src?'<div class="share-qr"><img src="'+esc(src)+'" alt="QR ติดต่อร้าน"></div>':'';try{if(raw){const d=JSON.parse(decodeURIComponent(escape(atob(raw))));box.innerHTML='<div class="share-card">'+(d.photo?'<img src="'+d.photo+'" alt="'+esc(d.title)+'">':'')+'<div class="share-details"><div class="eyebrow">พัดลมดี ป่าบอน</div><h1>'+esc(d.title)+'</h1><div class="price">'+money(d.price)+'</div><p>'+esc(d.caption||'')+'</p><p>รหัสสินค้า: '+esc(d.code||'—')+'<br>ติดต่อร้าน: '+esc(d.phone||'')+'</p><a class="btn btn-primary" href="tel:'+String(d.phone||'').replace(/[^0-9+]/g,'')+'">โทรติดต่อร้าน</a>'+qrBlock(d.qrPhoto)+'</div></div>';box.hidden=false;document.querySelector('.app').hidden=true}else if(shopRaw){const d=JSON.parse(decodeURIComponent(escape(atob(shopRaw))));box.innerHTML='<header class="share-shop-header"><div class="brandmark fan-brandmark">✿</div><h1>'+esc(d.shop||'พัดลมดี ป่าบอน')+'</h1><p>พัดลมมือสองพร้อมขาย · ซ่อม • ประกอบ • รับประกัน</p></header><div class="listing-grid">'+(d.items||[]).map(x=>'<article class="listing-card">'+(x.photo?'<img src="'+x.photo+'" alt="'+esc(x.title)+'">':'<div class="listing-placeholder">🌀</div>')+'<div class="listing-info"><strong>'+esc(x.title)+'</strong><p>'+esc(x.caption||'')+'</p><div class="price">'+money(x.price)+'</div><span class="badge badge-green">'+esc(x.status||'พร้อมขาย')+'</span></div></article>').join('')+'</div>'+qrBlock(d.qrPhoto);box.hidden=false;document.querySelector('.app').hidden=true}}catch{box.innerHTML='<div class="share-card share-details"><h1>เปิดรายการประกาศนี้ไม่ได้</h1><p>ลิงก์อาจไม่ครบ กรุณาขอข้อมูลจากร้านอีกครั้ง</p></div>';box.hidden=false;document.querySelector('.app').hidden=true}}
-function renderProfile(){const p=db.profile||{};const f=document.getElementById('profileForm');for(const k of ['shopName','owner','phone1','phone2','address','lineUrl'])if(f.elements[k])f.elements[k].value=p[k]||'';const img=document.getElementById('profilePhotoPreview');img.hidden=!p.photo;img.src=p.photo||'';document.getElementById('footerShopName').textContent='เจ้าของร้าน · '+(p.owner||'');document.getElementById('footerShopTag').textContent=(p.shopName||'')+' · ซ่อม • ประกอบ • ขาย • รับประกัน';document.getElementById('footerPhone1').textContent='โทร '+(p.phone1||'');document.getElementById('footerPhone1').href='tel:'+(p.phone1||'').replace(/[^0-9+]/g,'');document.getElementById('footerPhone2').textContent=p.phone2||'';document.getElementById('footerPhone2').href='tel:'+(p.phone2||'').replace(/[^0-9+]/g,'');document.getElementById('footerAddress').textContent=p.address||''}
+function renderProfile(){const p=db.profile||{};const f=document.getElementById('profileForm');for(const k of ['shopName','owner','phone1','phone2','address','lineUrl'])if(f.elements[k])f.elements[k].value=p[k]||'';const img=document.getElementById('profilePhotoPreview');img.hidden=!p.photo;img.src=p.photo||'';document.getElementById('footerShopName').textContent=p.owner||'';document.getElementById('footerShopTag').textContent=(p.shopName||'')+' · ซ่อม • ประกอบ • ขาย • รับประกัน';document.getElementById('footerPhone1').textContent=(p.phone1||'');document.getElementById('footerPhone1').href='tel:'+(p.phone1||'').replace(/[^0-9+]/g,'');document.getElementById('footerPhone2').textContent=p.phone2||'';document.getElementById('footerPhone2').href='tel:'+(p.phone2||'').replace(/[^0-9+]/g,'');document.getElementById('footerAddress').textContent=p.address||'';const qr=document.getElementById('footerQrImage'),empty=document.getElementById('footerQrEmpty'),caption=document.getElementById('footerQrCaption');qr.src=p.qrPhoto||'';qr.hidden=!p.qrPhoto;empty.hidden=!!p.qrPhoto;caption.hidden=!p.qrPhoto}
 document.getElementById('profilePhotoInput').addEventListener('change',async e=>{db.profile.photo=await dataUrl(e.target.files[0]);save();renderProfile()});document.getElementById('qrPhotoInput').addEventListener('change',async e=>{db.profile.qrPhoto=await dataUrl(e.target.files[0]);save();renderProfile()});document.getElementById('profileForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.currentTarget);for(const k of ['shopName','owner','phone1','phone2','address','lineUrl'])db.profile[k]=f.get(k)||'';save();renderProfile();toast('บันทึกโปรไฟล์ร้านแล้ว')});
 function showRepairWarranty(id){const r=db.repairs.find(x=>x.id===id);if(!r)return;currentWarranty={type:'repair',record:r};document.querySelector('#warrantyModal .warranty-actions .btn-soft').hidden=false;const end=plus(r.received,Number(r.warrantyDays||0));const rows=[['ลูกค้า',r.customer],['พัดลม',r.fan],['อาการแจ้งซ่อม',r.issue],['งาน / อะไหล่ที่ซ่อมหรือเปลี่ยน',r.replacedParts||r.work],['วันที่รับงาน',fmtDate(r.received)],['ระยะเวลารับประกัน',Number(r.warrantyDays||0)+' วัน'],['รับประกันถึง',fmtDate(end)],['หมายเลขอ้างอิง',r.id]];const terms='รับประกันเฉพาะงานซ่อมและอะไหล่ที่ระบุไว้ในใบรับประกันฉบับนี้เท่านั้น ไม่ครอบคลุมอาการเสียหรือความชำรุดของส่วนอื่นที่ไม่ได้ซ่อมหรือเปลี่ยนอะไหล่ รวมถึงความเสียหายจากการใช้งานผิดวิธีหรืออุบัติเหตุ';document.getElementById('warrantyPaper').innerHTML=certificateHtml('ใบรับประกันงานซ่อม','REPAIR WARRANTY',r.id,rows,terms,'repair-certificate');openModal('warrantyModal')}
 function renderAll(){renderOverview();renderSales();renderRepairs();renderCustomers();renderReports();renderInventory();renderListings();renderProfile()}
