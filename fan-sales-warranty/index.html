@@ -229,7 +229,7 @@ body{font-size:16px;color:#17392b;background:#f1f6f2}
   <div class="field"><label>เลขเครื่อง / หมายเลขประจำเครื่อง</label><input name="serial" placeholder="ถ้ามี"></div><div class="field"><label>สภาพสินค้า</label><select name="condition"><option>มือสอง ประกอบใหม่</option><option>มือสอง ปรับปรุงแล้ว</option><option>มือสอง สภาพดี</option><option>สินค้าใหม่</option></select></div>
   <div class="field"><label>วันที่ขาย *</label><input name="saleDate" type="date" required></div><div class="field"><label>ราคาขาย (บาท) *</label><input name="price" type="number" min="0" required placeholder="0"></div>
   <div class="field"><label>รับประกัน *</label><select name="warrantyDays"><option value="7">7 วัน</option><option value="30" selected>30 วัน</option><option value="60">60 วัน</option><option value="90">90 วัน</option><option value="180">180 วัน</option><option value="365">1 ปี</option><option value="custom">กำหนดเอง</option></select></div><div class="field"><label>ระยะประกัน (วัน) กรณีกำหนดเอง</label><input name="customDays" type="number" min="0" placeholder="เช่น 45"></div>
-  <div class="field full"><label>หมายเหตุ / อุปกรณ์ที่ให้ไป</label><textarea name="notes" placeholder="เช่น เปลี่ยนคาปาซิเตอร์ใหม่, แถมรีโมต"></textarea></div>
+  <div class="field full"><label>หมายเหตุ / อุปกรณ์ที่ให้ไป</label><textarea name="notes" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"></textarea></div>
 </div><div class="form-actions"><button type="button" class="btn" onclick="closeModal('saleModal')">ยกเลิก</button><button class="btn btn-primary" type="submit">บันทึกรายการ</button></div></form></div></div>
 <div class="modal-backdrop" id="repairModal"><div class="modal"><div class="modal-head"><div><h2>เปิดงานซ่อม / เคลม</h2><p>เก็บประวัติอาการและติดตามจนส่งเครื่องคืน</p></div><button class="close" onclick="closeModal('repairModal')">×</button></div><form class="form" id="repairForm"><div class="notice">ถ้าเป็นงานประกัน ให้เลือกรายการขายที่เกี่ยวข้อง เพื่อดูวันขายและวันหมดประกันได้ทันที</div><div class="form-grid">
   <div class="field full"><label>รายการขายที่เกี่ยวข้อง</label><select name="saleId" id="repairSale"><option value="">งานซ่อมทั่วไป / ไม่ได้ซื้อจากร้าน</option></select></div>
@@ -251,9 +251,9 @@ const today=new Date().toISOString().slice(0,10);
 const plus=(d,n)=>{const [y,m,day]=String(d||'').slice(0,10).split('-').map(Number);const x=new Date(Date.UTC(y,m-1,day+(Number(n)||0)));return Number.isFinite(x.getTime())?x.toISOString().slice(0,10):''};
 const seed={
  sales:[
-  {id:'F-1028',customer:'คุณนภา',phone:'089-xxx-2145',brand:'Hatari',model:'16 นิ้ว ตั้งพื้น',serial:'HT-16-4821',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-3),price:850,warrantyDays:30,notes:'เปลี่ยนคาปาซิเตอร์ใหม่'},
+  {id:'F-1028',customer:'คุณนภา',phone:'089-xxx-2145',brand:'Hatari',model:'16 นิ้ว ตั้งพื้น',serial:'HT-16-4821',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-3),price:850,warrantyDays:30,},
   {id:'F-1027',customer:'คุณวิทยา',phone:'081-xxx-6612',brand:'Mitsubishi',model:'16 นิ้ว ตั้งพื้น',serial:'-',condition:'มือสอง ปรับปรุงแล้ว',saleDate:plus(today,-18),price:1200,warrantyDays:60,notes:'ทำความสะอาดและอัดจาระบี'},
-  {id:'F-1026',customer:'คุณอรทัย',phone:'086-xxx-0193',brand:'Hatari',model:'18 นิ้ว ตั้งพื้น',serial:'HT-18-1138',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-47),price:1450,warrantyDays:60,notes:'เปลี่ยนสายไฟและคาปาซิเตอร์'},
+  {id:'F-1026',customer:'คุณอรทัย',phone:'086-xxx-0193',brand:'Hatari',model:'18 นิ้ว ตั้งพื้น',serial:'HT-18-1138',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-47),price:1450,warrantyDays:60},
   {id:'F-1025',customer:'คุณสมชาย',phone:'092-xxx-4410',brand:'Sharp',model:'16 นิ้ว ตั้งโต๊ะ',serial:'SH-16-8830',condition:'มือสอง สภาพดี',saleDate:plus(today,-72),price:650,warrantyDays:30,notes:'ทดสอบใช้งานแล้ว'}
  ],
  repairs:[
