@@ -1,9 +1,9 @@
 <!doctype html>
-<!-- Fan Shop v1.11 | Build 2026-10-25: in-app navigation, machine serials, clickable reports, and warranty card readability -->
+<!-- Fan Shop v1.12 | Build 2026-10-25: customer phone tap-to-call -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.11">
+<meta name="app-version" content="1.12">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f7f8f5">
 <title>พัดลมดี | บันทึกขายและรับประกัน</title>
@@ -233,7 +233,7 @@ body{font-size:16px;color:#17392b;background:#f1f6f2}
 /* v1.11 — clickable report shortcuts, generated fan serials, and readable warranty cards */
 .report-stat{width:100%;font:inherit;text-align:left;color:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}.report-stat:hover,.quick-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(12,83,55,.12)}.report-stat:focus-visible,.quick-card:focus-visible{outline:3px solid #28a86b;outline-offset:2px}.quick-card{font:inherit;color:inherit;cursor:pointer}.machine-no{display:block;margin-top:5px;color:#587267;font-size:11px;font-weight:750}.cert-row{min-height:70px}.cert-label{font-size:16px}.cert-value{font-size:20px}.cert-terms{font-size:14px}.cert-terms strong{font-size:16px}.cert-contact-info{font-size:13px}.cert-shop strong{font-size:18px}.cert-contact{grid-template-columns:1fr 150px}.cert-qr img{width:130px;height:130px}.cert-thanks{font-size:18px}
 @media(max-width:680px){.cert-row{grid-template-columns:minmax(95px,32%) 1fr;min-height:64px;gap:9px;padding:8px 1px}.cert-label{font-size:14px}.cert-value{font-size:17px}.cert-terms{font-size:13px}.cert-terms strong{font-size:15px}.cert-contact{grid-template-columns:minmax(0,1fr) 78px}.cert-contact-info{font-size:10px}.cert-shop strong{font-size:13px}.cert-qr img{width:76px;height:76px}.cert-thanks{font-size:14px}}
-</style></head>
+</style><style>.phone-link{color:var(--green);font-weight:800;text-decoration:none;white-space:nowrap}.phone-link:hover,.phone-link:focus-visible{text-decoration:underline;outline-offset:2px}</style></head>
 <body>
 <div class="app">
 <aside class="sidebar">
@@ -440,31 +440,32 @@ function renderOverview(){
  const activeRep=db.repairs.filter(r=>r.status!=='ส่งคืนแล้ว');
  document.getElementById('repairQueue').innerHTML=activeRep.slice(0,3).map(r=>'<div class="mini-item"><div class="mini-fan">🔧</div><div class="mini-copy"><strong>'+esc(r.fan)+' · '+esc(r.kind)+'</strong><small>'+fmtDate(r.received)+' · '+esc(r.customer)+'</small></div><div class="mini-trailing"><span class="badge '+(r.status==='กำลังซ่อม'?'badge-orange':r.status==='รอดำเนินการ'?'badge-red':'badge-green')+'">'+esc(r.status)+'</span></div></div>').join('')||'<div class="mini-empty">ไม่มีงานซ่อมค้าง</div>';
  const ending=db.sales.filter(s=>isActive(s)&&new Date(warrantyEnd(s)+'T12:00:00')-new Date(today+'T12:00:00')<30*86400000).slice(0,3);
- document.getElementById('warrantyQueue').innerHTML=ending.map(s=>'<div class="queue-item"><div class="queue-mark">◷</div><div style="flex:1"><strong>'+esc(s.customer)+' · '+esc(s.brand)+'</strong><p>'+esc(s.model)+' · หมดประกัน '+fmtDate(warrantyEnd(s))+'</p><div class="queue-meta"><span>'+esc(s.phone||'')+'</span><span class="badge badge-orange">'+Math.max(0,Math.ceil((new Date(warrantyEnd(s)+'T12:00:00')-new Date(today+'T12:00:00'))/86400000))+' วัน</span></div></div></div>').join('')||'<div class="empty">ไม่มีประกันใกล้หมด</div>';
+ document.getElementById('warrantyQueue').innerHTML=ending.map(s=>'<div class="queue-item"><div class="queue-mark">◷</div><div style="flex:1"><strong>'+esc(s.customer)+' · '+esc(s.brand)+'</strong><p>'+esc(s.model)+' · หมดประกัน '+fmtDate(warrantyEnd(s))+'</p><div class="queue-meta"><span>'+phoneLink(s.phone)+'</span><span class="badge badge-orange">'+Math.max(0,Math.ceil((new Date(warrantyEnd(s)+'T12:00:00')-new Date(today+'T12:00:00'))/86400000))+' วัน</span></div></div></div>').join('')||'<div class="empty">ไม่มีประกันใกล้หมด</div>';
  const latest=db.sales[0], preview=document.getElementById('dashboardWarranty');
  if(latest){const state=isActive(latest);preview.innerHTML='<div class="warranty-preview"><div class="mini-fan">🌀</div><div><strong>ลูกค้า: '+esc(latest.customer)+'</strong><small>ยี่ห้อ / รุ่น: '+esc(latest.brand)+' '+esc(latest.model)+'<br>วันที่ซื้อ: '+fmtDate(latest.saleDate)+' · หมดประกัน: '+fmtDate(warrantyEnd(latest))+'</small></div><button class="badge '+(state?'badge-green':'badge-gray')+'" type="button" style="border:0;cursor:pointer" onclick="showWarranty(&quot;'+esc(latest.id)+'&quot;)">'+(state?'อยู่ในประกัน':'หมดประกัน')+' ›</button></div>';}else{preview.innerHTML='<div class="warranty-empty">ยังไม่มีใบรับประกัน · เริ่มจากบันทึกรายการขาย</div>'; }
 }
 function renderSales(){
  const q=(document.getElementById('salesSearch')?.value||'').toLowerCase(),f=document.getElementById('salesFilter')?.value||'all';
  const rows=db.sales.filter(s=>([s.customer,s.phone,s.brand,s.model,s.serial,s.id].join(' ').toLowerCase().includes(q))&&(f==='all'||(f==='active'?isActive(s):!isActive(s))));
- document.getElementById('salesRows').innerHTML=rows.map(s=>'<tr><td><div class="fan-cell"><div class="fan-icon">🌀</div><div><strong>'+s.brand+' '+s.model+'</strong><small>'+s.id+' · '+(s.serial||'ไม่มีเลขเครื่อง')+'</small></div></div></td><td>'+s.customer+'</td><td>'+s.phone+'</td><td>'+fmtDate(s.saleDate)+'</td><td class="price">'+money(s.price)+'</td><td>'+fmtDate(warrantyEnd(s))+' <small style="color:#89938d">('+s.warrantyDays+' วัน)</small></td><td>'+statusBadge(s)+'</td><td><button class="btn btn-small btn-soft" data-id="'+s.id+'" onclick="showWarranty(this.dataset.id)">ดู / พิมพ์</button></td></tr>').join('')||'<tr><td colspan="8" class="empty"><strong>ไม่พบรายการขาย</strong>ลองเปลี่ยนคำค้น หรือเพิ่มรายการขายใหม่</td></tr>';
+ document.getElementById('salesRows').innerHTML=rows.map(s=>'<tr><td><div class="fan-cell"><div class="fan-icon">🌀</div><div><strong>'+s.brand+' '+s.model+'</strong><small>'+s.id+' · '+(s.serial||'ไม่มีเลขเครื่อง')+'</small></div></div></td><td>'+s.customer+'</td><td>'+phoneLink(s.phone)+'</td><td>'+fmtDate(s.saleDate)+'</td><td class="price">'+money(s.price)+'</td><td>'+fmtDate(warrantyEnd(s))+' <small style="color:#89938d">('+s.warrantyDays+' วัน)</small></td><td>'+statusBadge(s)+'</td><td><button class="btn btn-small btn-soft" data-id="'+s.id+'" onclick="showWarranty(this.dataset.id)">ดู / พิมพ์</button></td></tr>').join('')||'<tr><td colspan="8" class="empty"><strong>ไม่พบรายการขาย</strong>ลองเปลี่ยนคำค้น หรือเพิ่มรายการขายใหม่</td></tr>';
 }
 function openReturnedRepairs(){showPage('repairs');const filter=document.getElementById('repairFilter');if(filter){filter.value='ส่งคืนแล้ว';renderRepairs()}}
 function renderRepairs(){
  const q=(document.getElementById('repairSearch')?.value||'').toLowerCase(),f=document.getElementById('repairFilter')?.value||'all';
  const rows=db.repairs.filter(r=>([r.id,r.customer,r.fan,r.issue,r.phone].join(' ').toLowerCase().includes(q))&&(f==='all'||r.status===f));
- document.getElementById('repairRows').innerHTML=rows.map(r=>'<tr><td><b>'+r.id+'</b><small style="display:block;color:#89938d;margin-top:3px">'+r.kind+'</small><button class="btn btn-small btn-soft" onclick="showRepairWarranty(\''+r.id+'\')">ใบรับประกันซ่อม</button></td><td><div class="fan-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px">'+initials(r.customer)+'</div><div><strong>'+r.customer+'</strong><small>'+r.fan+'</small></div></div></td><td>'+r.issue+'</td><td>'+fmtDate(r.received)+'</td><td>'+fmtDate(r.due)+'</td><td><span class="badge '+(r.status==='ส่งคืนแล้ว'?'badge-green':r.status==='กำลังซ่อม'?'badge-orange':'badge-gray')+'">'+r.status+'</span></td></tr>').join('')||'<tr><td colspan="6" class="empty"><strong>ไม่พบงานซ่อม</strong>เพิ่มงานใหม่ได้จากปุ่มด้านบน</td></tr>';
+ document.getElementById('repairRows').innerHTML=rows.map(r=>'<tr><td><b>'+r.id+'</b><small style="display:block;color:#89938d;margin-top:3px">'+r.kind+'</small><button class="btn btn-small btn-soft" onclick="showRepairWarranty(\''+r.id+'\')">ใบรับประกันซ่อม</button></td><td><div class="fan-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px">'+initials(r.customer)+'</div><div><strong>'+esc(r.customer)+'</strong><small>'+esc(r.fan)+'</small><small>'+phoneLink(r.phone)+'</small></div></div></td><td>'+r.issue+'</td><td>'+fmtDate(r.received)+'</td><td>'+fmtDate(r.due)+'</td><td><span class="badge '+(r.status==='ส่งคืนแล้ว'?'badge-green':r.status==='กำลังซ่อม'?'badge-orange':'badge-gray')+'">'+r.status+'</span></td></tr>').join('')||'<tr><td colspan="6" class="empty"><strong>ไม่พบงานซ่อม</strong>เพิ่มงานใหม่ได้จากปุ่มด้านบน</td></tr>';
 }
 function renderCustomers(){
  const q=(document.getElementById('customerSearch')?.value||'').toLowerCase(),map=new Map();
  db.sales.forEach(s=>{const c=map.get(s.customer)||{customer:s.customer,phone:s.phone,count:0,last:s.saleDate,active:0};c.count++;if(s.saleDate>c.last)c.last=s.saleDate;if(isActive(s))c.active++;map.set(s.customer,c)});
  const rows=[...map.values()].filter(c=>(c.customer+' '+c.phone).toLowerCase().includes(q));
- document.getElementById('customerRows').innerHTML=rows.map(c=>'<tr><td><div class="fan-cell"><div class="avatar" style="width:34px;height:34px">'+initials(c.customer)+'</div><strong>'+c.customer+'</strong></div></td><td>'+c.phone+'</td><td>'+c.count+' เครื่อง</td><td>'+fmtDate(c.last)+'</td><td><span class="badge '+(c.active?'badge-green':'badge-gray')+'">'+c.active+' เครื่องยังมีประกัน</span></td></tr>').join('')||'<tr><td colspan="5" class="empty"><strong>ยังไม่มีรายชื่อลูกค้า</strong>รายชื่อจะเพิ่มเมื่อบันทึกการขาย</td></tr>';
+ document.getElementById('customerRows').innerHTML=rows.map(c=>'<tr><td><div class="fan-cell"><div class="avatar" style="width:34px;height:34px">'+initials(c.customer)+'</div><strong>'+c.customer+'</strong></div></td><td>'+phoneLink(c.phone)+'</td><td>'+c.count+' เครื่อง</td><td>'+fmtDate(c.last)+'</td><td><span class="badge '+(c.active?'badge-green':'badge-gray')+'">'+c.active+' เครื่องยังมีประกัน</span></td></tr>').join('')||'<tr><td colspan="5" class="empty"><strong>ยังไม่มีรายชื่อลูกค้า</strong>รายชื่อจะเพิ่มเมื่อบันทึกการขาย</td></tr>';
 }
 function renderReports(){
  document.getElementById('reportRevenue').textContent=money(db.sales.reduce((a,s)=>a+Number(s.price||0),0));document.getElementById('reportSales').textContent=db.sales.length+' เครื่อง';document.getElementById('reportRepairCount').textContent=db.repairs.length+' งาน';document.getElementById('reportClosed').textContent=db.repairs.filter(r=>r.status==='ส่งคืนแล้ว').length+' งาน';
 }
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function phoneLink(value){const label=String(value||'').trim(),tel=label.replace(/[^0-9+]/g,'');return tel?'<a class="phone-link" href="tel:'+esc(tel)+'">'+esc(label)+'</a>':'—'}
 let currentWarranty=null;
 function certificateBrandHtml(shop){return '<div class="cert-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 29C21 21 21 8 30 3c8-4 17 3 14 12-2 6-8 10-14 14Zm5 4c8-9 21-9 26 0 4 8-3 17-12 14-6-2-10-8-14-14ZM30 36c9 8 9 21 0 26-8 4-17-3-14-12 2-6 8-10 14-14Z" fill="#fff"/><circle cx="32" cy="32" r="4" fill="#dff4e6"/></svg></div>'}
 function warrantyFooterHtml(){
