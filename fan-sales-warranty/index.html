@@ -1,11 +1,16 @@
 <!doctype html>
-<!-- Fan Shop v1.15 | Single-page warranty PDF and listing cleanup; based on v1.14. -->
+<!-- Fan Shop v1.16 | Supabase sync, clean start, and Android installable PWA. -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.15">
+<meta name="app-version" content="1.16">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f7f8f5">
+<meta name="theme-color" content="#07583e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="พัดลมดี">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./fan-icon-192.png">
+<link rel="apple-touch-icon" href="./fan-icon-192.png">
 <title>พัดลมดี | บันทึกขายและรับประกัน</title>
 <style>
 :root{--ink:#17221f;--muted:#77827e;--paper:#f7f8f5;--card:#fff;--line:#e6eae6;--green:#176c4f;--green-soft:#e4f3ec;--orange:#e68b4c;--orange-soft:#fff1e6;--blue:#456b91;--blue-soft:#eaf1f8;--red:#b45d50;--red-soft:#fff0ed;--shadow:0 8px 28px rgba(31,53,43,.06);--radius:18px}
@@ -166,6 +171,9 @@ body>*:not(#warrantyModal){display:none!important}
 #warrantyPaper .cert-thanks{margin-top:8px!important;font-size:13px!important;line-height:1.25!important}
 #warrantyPaper .cert-thanks small{font-size:9px!important;margin-top:2px!important}
 }
+
+.head-tools{display:flex;align-items:center;gap:6px}.head-tool{width:36px;height:36px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--green);font-size:18px;display:grid;place-items:center;padding:0}.head-tool:hover{background:var(--green-soft)}.cloud-busy{opacity:.7}.pwa-hidden{display:none!important}
+@media(max-width:680px){.mobile-head{grid-template-columns:42px minmax(0,1fr) auto!important}.mobile-head .mobile-brand{min-width:0}.mobile-head .mobile-brand>div:last-child{min-width:0}.mobile-head .mobile-brand strong,.mobile-head .mobile-brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mobile-head .head-tools{gap:4px}.mobile-head .head-tool{width:34px;height:36px}.topbar{display:none!important}}
 </style>
 <style id="fan-header-footer-redesign">
 /* Match the supplied home-page reference with a fresh fan photo and a three-part shop footer. */
@@ -306,8 +314,8 @@ body>*:not(#warrantyModal){display:none!important}
 </aside>
 <button type="button" class="menu-backdrop" id="menuBackdrop" aria-label="ปิดเมนู" onclick="closeMenu()"></button>
 <main class="main">
-  <div class="mobile-head"><button class="hamburger" type="button" aria-label="เปิดเมนู" onclick="toggleMenu()">☰</button><div class="mobile-brand"><div class="brandmark fan-brandmark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 29C21 21 21 8 30 3c8-4 17 3 14 12-2 6-8 10-14 14Zm5 4c8-9 21-9 26 0 4 8-3 17-12 14-6-2-10-8-14-14ZM30 36c9 8 9 21 0 26-8 4-17-3-14-12 2-6 8-10 14-14Z" fill="currentColor"/></svg></div><div><strong>พัดลมดี <em>ป่าบอน</em></strong><small>ซ่อม • ประกอบ • ขาย • รับประกัน</small></div></div></div>
-  <div class="topbar"><div class="crumb">ระบบจัดการร้าน / <b id="crumbName">ภาพรวม</b></div><div class="account"><div class="avatar">จ</div><div><span>เจ้าของร้าน</span><small>ระบบบันทึกงานพัดลม</small></div></div></div>
+  <div class="mobile-head"><button class="hamburger" type="button" aria-label="เปิดเมนู" onclick="toggleMenu()">☰</button><div class="mobile-brand"><div class="brandmark fan-brandmark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 29C21 21 21 8 30 3c8-4 17 3 14 12-2 6-8 10-14 14Zm5 4c8-9 21-9 26 0 4 8-3 17-12 14-6-2-10-8-14-14ZM30 36c9 8 9 21 0 26-8 4-17-3-14-12 2-6 8-10 14-14Z" fill="currentColor"/></svg></div><div><strong>พัดลมดี <em>ป่าบอน</em></strong><small>ซ่อม • ประกอบ • ขาย • รับประกัน</small></div></div><div class="head-tools"><button type="button" class="head-tool" id="installAppBtnMobile" aria-label="ติดตั้งแอป" title="ติดตั้งแอป" onclick="installApp()">⬇</button><button type="button" class="head-tool" id="cloudButtonMobile" aria-label="เชื่อม Supabase" title="เชื่อม Supabase" onclick="connectCloud()">☁</button></div></div>
+  <div class="topbar"><div class="crumb">ระบบจัดการร้าน / <b id="crumbName">ภาพรวม</b></div><div class="account"><button class="btn btn-small btn-soft" id="cloudButton" type="button" onclick="connectCloud()">☁ เชื่อมข้อมูล</button><button class="btn btn-small" id="installAppBtn" type="button" onclick="installApp()">⬇ ติดตั้งแอป</button><div class="avatar">จ</div><div><span>เจ้าของร้าน</span><small>ระบบบันทึกงานพัดลม</small></div></div></div>
   <section class="page-section active" id="page-overview">
     <div class="hero-banner">
       <div class="hero-copy"><div class="eyebrow">พัดลมดี ป่าบอน · ซ่อม · ประกอบ · ขาย · รับประกัน</div><h2>สวัสดีครับ<br><em>คุณจำเริญ</em></h2><p>ดูแลพัดลม ให้ลมดี ใช้งานได้นาน<br>บริการด้วยความจริงใจครับ</p></div><div class="hero-slogan"><strong>ลมดี<br>ใช้งานได้นาน</strong><small>ต้อง… พัดลมดี ป่าบอน</small></div>
@@ -415,30 +423,29 @@ body>*:not(#warrantyModal){display:none!important}
 <div class="modal-backdrop" id="stockMoveModal"><div class="modal"><div class="modal-head"><div><h2>เบิกสินค้าออกจากสต๊อก</h2><p>บันทึกจำนวน วันที่ และหมายเหตุการเบิก</p></div><button class="close" onclick="closeModal('stockMoveModal')">×</button></div><form class="form" id="stockMoveForm"><div class="form-grid"><div class="field full"><label>สินค้า *</label><select name="itemId" id="moveItemSelect" required></select></div><div class="field"><label>จำนวน *</label><input name="qty" type="number" min="1" value="1" required></div><div class="field"><label>วันที่ *</label><input name="date" type="date" required></div><div class="field"><label>หมายเหตุ</label><input name="note"></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal('stockMoveModal')">ยกเลิก</button><button class="btn btn-primary" type="submit">บันทึกรายการ</button></div></form></div></div>
 <div class="modal-backdrop" id="listingModal"><div class="modal"><div class="modal-head"><div><h2>จัดทำประกาศขาย</h2><p>ประกาศสินค้าที่เลือกจากสต๊อก</p></div><button class="close" onclick="closeModal('listingModal')">×</button></div><form class="form" id="listingForm"><input name="itemId" type="hidden"><div class="form-grid"><div class="field full"><label>สินค้า</label><input name="title" readonly></div><div class="field"><label>ราคา (บาท) *</label><input name="price" type="number" min="0" required></div><div class="field"><label>สถานะ</label><select name="status"><option value="พร้อมขาย">พร้อมขาย</option><option value="จองแล้ว">จองแล้ว</option></select></div><div class="field full"><label>รายละเอียดและจุดเด่นสินค้า</label><textarea name="caption" placeholder="กรอกรายละเอียดจริง เช่น สภาพสินค้า งานที่ซ่อม/เปลี่ยน และจุดเด่นที่ต้องการบอกลูกค้า"></textarea><div class="caption-options"><button type="button" class="btn btn-soft" onclick="generateListingCaptions()">✦ ช่วยเรียบเรียงคำโฆษณา</button><select id="captionVariantSelect" hidden onchange="applyListingCaption(this.value)"><option value="">เลือกสำนวนที่ต้องการ</option></select></div><p class="caption-help">สร้างหลายสำนวนจากข้อมูลที่คุณกรอก เลือกและแก้ไขได้ก่อนแชร์ ระบบจะไม่เพิ่มคุณสมบัติที่ไม่ได้ระบุ</p></div></div><div class="form-actions"><button type="button" class="btn" onclick="closeModal('listingModal')">ยกเลิก</button><button class="btn btn-primary" type="submit">บันทึกประกาศ</button></div></form></div></div>
 <div class="toast" id="toast"></div>
+<script src="./supabase.min.js"></script>
 <script>
 const key='fan-care-demo-v1';
 const today=new Date().toISOString().slice(0,10);
 const plus=(d,n)=>{const [y,m,day]=String(d||'').slice(0,10).split('-').map(Number);const x=new Date(Date.UTC(y,m-1,day+(Number(n)||0)));return Number.isFinite(x.getTime())?x.toISOString().slice(0,10):''};
-const seed={
- sales:[
-  {id:'F-1028',customer:'คุณนภา',phone:'089-xxx-2145',brand:'Hatari',model:'16 นิ้ว ตั้งพื้น',serial:'HT-16-4821',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-3),price:850,warrantyDays:30,},
-  {id:'F-1027',customer:'คุณวิทยา',phone:'081-xxx-6612',brand:'Mitsubishi',model:'16 นิ้ว ตั้งพื้น',serial:'-',condition:'มือสอง ปรับปรุงแล้ว',saleDate:plus(today,-18),price:1200,warrantyDays:60,notes:'ทำความสะอาดและอัดจาระบี'},
-  {id:'F-1026',customer:'คุณอรทัย',phone:'086-xxx-0193',brand:'Hatari',model:'18 นิ้ว ตั้งพื้น',serial:'HT-18-1138',condition:'มือสอง ประกอบใหม่',saleDate:plus(today,-47),price:1450,warrantyDays:60},
-  {id:'F-1025',customer:'คุณสมชาย',phone:'092-xxx-4410',brand:'Sharp',model:'16 นิ้ว ตั้งโต๊ะ',serial:'SH-16-8830',condition:'มือสอง สภาพดี',saleDate:plus(today,-72),price:650,warrantyDays:30,notes:'ทดสอบใช้งานแล้ว'}
- ],
- repairs:[
-  {id:'R-0206',customer:'คุณมาลี',phone:'086-xxx-2240',fan:'Hatari 16 นิ้ว',kind:'เคลมในประกัน',received:plus(today,-1),due:plus(today,2),issue:'เปิดติดแต่ใบพัดหมุนช้า',status:'กำลังซ่อม',cost:0,work:'รอตรวจขดลวดและคาปาซิเตอร์'},
-  {id:'R-0205',customer:'คุณเอกชัย',phone:'089-xxx-3402',fan:'Mitsubishi 16 นิ้ว',kind:'ซ่อมทั่วไป',received:plus(today,-2),due:plus(today,1),issue:'มอเตอร์มีเสียงดังและส่ายไม่ได้',status:'รอดำเนินการ',cost:150,work:'รออะไหล่ชุดเฟืองส่าย'},
-  {id:'R-0204',customer:'คุณนภา',phone:'089-xxx-2145',fan:'Hatari 16 นิ้ว',kind:'เคลมในประกัน',received:plus(today,-12),due:plus(today,-8),issue:'ปุ่มปรับระดับความเร็วหลวม',status:'ส่งคืนแล้ว',cost:0,work:'ขันหน้าสัมผัสและทดสอบเรียบร้อย'}
- ]
-};
+const demoSaleIds=new Set(['F-1028','F-1027','F-1026','F-1025']);
+const demoRepairIds=new Set(['R-0206','R-0205','R-0204']);
+function blankDb(){return {sales:[],repairs:[],stockItems:[],stockMoves:[],listings:[],profile:{shopName:'พัดลมดี ป่าบอน',owner:'จำเริญ สุวรรณพุ่ม',phone1:'081-2548-297',phone2:'085-821-1580',address:'164/1 หมู่ 7 ต.ป่าบอน อ.ป่าบอน จ.พัทลุง 93170',lineUrl:'',facebookUrl:'',photo:'',qrPhoto:''}}}
+function cleanDataState(input){const d=Object.assign(blankDb(),input&&typeof input==='object'?input:{});d.sales=Array.isArray(d.sales)?d.sales:[];d.repairs=Array.isArray(d.repairs)?d.repairs:[];d.stockItems=Array.isArray(d.stockItems)?d.stockItems:[];d.stockMoves=Array.isArray(d.stockMoves)?d.stockMoves:[];d.listings=Array.isArray(d.listings)?d.listings:[];d.profile=Object.assign(blankDb().profile,d.profile&&typeof d.profile==='object'?d.profile:{});const salesBefore=d.sales.length,repairsBefore=d.repairs.length;d.sales=d.sales.filter(x=>!demoSaleIds.has(String(x?.id||'')));d.repairs=d.repairs.filter(x=>!demoRepairIds.has(String(x?.id||'')));return {data:d,removed:d.sales.length!==salesBefore||d.repairs.length!==repairsBefore}}
+let localSeedRowsRemoved=false;
 let db;
-try{db=JSON.parse(localStorage.getItem(key))||JSON.parse(JSON.stringify(seed))}catch{db=JSON.parse(JSON.stringify(seed))}
-db.sales ||= []; db.repairs ||= []; db.stockItems ||= []; db.stockMoves ||= []; db.listings ||= []; db.profile ||= {shopName:'พัดลมดี ป่าบอน',owner:'จำเริญ สุวรรณพุ่ม',phone1:'081-2548-297',phone2:'085-821-1580',address:'164/1 หมู่ 7 ต.ป่าบอน อ.ป่าบอน จ.พัทลุง 93170',lineUrl:'',facebookUrl:'',photo:'',qrPhoto:''};db.profile.facebookUrl ||= '';
-function save(){localStorage.setItem(key,JSON.stringify(db))}
+try{const raw=localStorage.getItem(key),clean=cleanDataState(raw?JSON.parse(raw):blankDb());db=clean.data;localSeedRowsRemoved=clean.removed}catch{db=blankDb()}
+db.sales ||= [];db.repairs ||= [];db.stockItems ||= [];db.stockMoves ||= [];db.listings ||= [];db.profile=Object.assign(blankDb().profile,db.profile||{});db.profile.facebookUrl ||= '';
+const SUPABASE_URL='https://krhqrfmwvxtcrugbhywv.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jPlgQf74WIUM-M1q6CcvFA_lMlSLgig';
+const supabaseClient=window.supabase&&typeof window.supabase.createClient==='function'?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce'}}):null;
+let cloudUser=null,cloudReady=false,cloudSaving=false,cloudSaveTimer=null,cloudRevision=1,localChangeRevision=0,installPromptEvent=null;
+function save(){try{localStorage.setItem(key,JSON.stringify(db));localChangeRevision++}catch(e){console.warn('Local save failed',e);toast('พื้นที่จัดเก็บในโทรศัพท์เต็ม กรุณาสำรองข้อมูลก่อนเพิ่มรูป')}queueCloudSave()}
+function setCloudStatus(label,title){for(const id of ['cloudButton','cloudButtonMobile']){const b=document.getElementById(id);if(!b)continue;b.title=title||label;b.setAttribute('aria-label',title||label);if(id==='cloudButton')b.textContent=cloudUser?'☁ เชื่อมแล้ว':'☁ '+label;else b.textContent=cloudUser?'☁':'☁';b.classList.toggle('cloud-busy',label.includes('กำลัง'))}}
+function queueCloudSave(){if(!cloudReady||!cloudUser||!supabaseClient)return;if(cloudSaveTimer)clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(flushCloudSave,650)}
+async function flushCloudSave(){if(!cloudReady||!cloudUser||!supabaseClient)return;if(cloudSaving){queueCloudSave();return}cloudSaving=true;const savedRevision=localChangeRevision;const snapshot=JSON.parse(JSON.stringify(db));try{const {error}=await supabaseClient.from('fan_shop_data').upsert({user_id:cloudUser.id,data:snapshot,revision:cloudRevision+1,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;cloudRevision++;if(savedRevision===localChangeRevision)setCloudStatus('เชื่อมแล้ว','ข้อมูลบันทึกใน Supabase แล้ว');else queueCloudSave()}catch(e){console.warn('Supabase save failed',e);setCloudStatus('รอซิงก์','บันทึกในเครื่องแล้ว กำลังรอเชื่อม Supabase');}finally{cloudSaving=false}}
 function normStockText(v){return String(v||'').normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase()}
 function normalizeStockAndListings(){const merged=new Map(),redirect=new Map(),kept=[];for(const item of db.stockItems){if(item.type!=='part'){kept.push(item);continue}const k=[normStockText(item.name),normStockText(item.model||item.brand),normStockText(item.unit||'ชิ้น')].join('|');const target=merged.get(k);if(!target){item.code='';item.unit||='ชิ้น';merged.set(k,item);kept.push(item)}else{target.qty=Number(target.qty||0)+Number(item.qty||0);target.cost=Number(item.cost||target.cost||0);target.price=Number(item.price||target.price||0);if(!target.photo&&item.photo)target.photo=item.photo;redirect.set(item.id,target.id)}}db.stockItems=kept;for(const move of db.stockMoves){if(redirect.has(move.itemId))move.itemId=redirect.get(move.itemId)}const seen=new Set();db.listings=(db.listings||[]).filter(x=>{const item=db.stockItems.find(i=>i.id===x.itemId);const k=x.code||item?.code||x.itemId;if(!k||seen.has(k))return false;seen.add(k);return true})}
-normalizeStockAndListings();save();
 function fmtDate(s){if(!s)return'—';return new Date(s+'T12:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'})}
 function money(n){return '฿ '+Number(n||0).toLocaleString('th-TH')}
 function warrantyEnd(s){return plus(s.saleDate,Number(s.warrantyDays||0))}
@@ -578,7 +585,13 @@ document.getElementById('profilePhotoInput').addEventListener('change',async e=>
 function showRepairWarranty(id){const r=db.repairs.find(x=>x.id===id);if(!r)return;currentWarranty={type:'repair',record:r};document.querySelector('#warrantyModal .warranty-actions .btn-soft').hidden=false;const end=repairWarrantyEnd(r),start=repairWarrantyStart(r),rows=[['ลูกค้า',r.customer],['พัดลม',r.fan],['อาการแจ้งซ่อม',r.issue],['งาน / อะไหล่ที่ซ่อมหรือเปลี่ยน',r.replacedParts||r.work],['วันที่รับงาน',fmtDate(r.received)],['วันที่ส่งคืน / เริ่มประกันงานซ่อม',fmtDate(start)],['ระยะเวลารับประกัน',Number(r.warrantyDays||0)+' วัน'],['รับประกันถึง',fmtDate(end)],['หมายเลขอ้างอิง',r.id]];const terms='รับประกันเฉพาะงานซ่อมและอะไหล่ที่ระบุไว้ในใบรับประกันฉบับนี้เท่านั้น ไม่ครอบคลุมอาการเสียหรือความชำรุดของส่วนอื่นที่ไม่ได้ซ่อมหรือเปลี่ยนอะไหล่ รวมถึงความเสียหายจากการใช้งานผิดวิธีหรืออุบัติเหตุ';document.getElementById('warrantyPaper').innerHTML=certificateHtml('ใบรับประกันงานซ่อม','REPAIR WARRANTY',r.id,rows,terms,'repair-certificate');openModal('warrantyModal')}
 function renderAll(){renderOverview();renderSales();renderRepairs();renderCustomers();renderReports();renderInventory();renderListings();renderProfile()}
 
-renderAll();showSharedPage();
+async function hydrateCloud(session){if(!session?.user||!supabaseClient)return;if(cloudUser?.id===session.user.id&&cloudReady)return;cloudUser=session.user;cloudReady=false;setCloudStatus('กำลังโหลด','กำลังโหลดข้อมูลจาก Supabase');try{const {data,error}=await supabaseClient.from('fan_shop_data').select('data,revision').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;if(data){const clean=cleanDataState(data.data);db=clean.data;cloudRevision=Number(data.revision)||1;normalizeStockAndListings();cloudReady=true;renderAll();save();}else{const clean=cleanDataState(db);db=clean.data;cloudRevision=0;normalizeStockAndListings();cloudReady=true;await flushCloudSave();renderAll()}setCloudStatus('เชื่อมแล้ว','ลงชื่อเข้าใช้แล้ว ข้อมูลจะซิงก์กับ Supabase อัตโนมัติ')}catch(e){console.warn('Supabase load failed',e);cloudUser=null;cloudReady=false;setCloudStatus('เชื่อมไม่ได้',e.message||'เชื่อม Supabase ไม่สำเร็จ');toast('เชื่อม Supabase ไม่สำเร็จ: '+(e.message||'ตรวจสอบอินเทอร์เน็ตและการตั้งค่าล็อกอิน'))}}
+async function connectCloud(){if(!supabaseClient){toast('โหลดระบบ Supabase ไม่สำเร็จ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วเปิดใหม่');return}if(cloudUser){const {error}=await supabaseClient.auth.signOut();if(error)toast(error.message);else{cloudUser=null;cloudReady=false;setCloudStatus('เชื่อมข้อมูล','ออกจากระบบแล้ว ข้อมูลในเครื่องยังอยู่')}return}if(!navigator.onLine){toast('ต้องเชื่อมอินเทอร์เน็ตเพื่อลงชื่อเข้าใช้ Supabase');return}setCloudStatus('กำลังเปิด','กำลังเปิดหน้าเข้าสู่ระบบ GitHub');const {error}=await supabaseClient.auth.signInWithOAuth({provider:'github',options:{redirectTo:location.href.split('#')[0]}});if(error){setCloudStatus('เชื่อมข้อมูล',error.message);toast('เข้าสู่ระบบไม่สำเร็จ: '+error.message)}}
+async function initCloud(){if(!supabaseClient){setCloudStatus('เชื่อมข้อมูล','โหลด Supabase SDK ไม่สำเร็จ');return}try{const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session)await hydrateCloud(data.session);else setCloudStatus('เชื่อมข้อมูล','กดเพื่อเข้าสู่ระบบ GitHub และซิงก์ข้อมูล')}catch(e){console.warn('Supabase session check failed',e);setCloudStatus('เชื่อมข้อมูล','ตรวจสอบสถานะ Supabase ไม่สำเร็จ')}supabaseClient.auth.onAuthStateChange((_event,session)=>setTimeout(()=>{if(session)hydrateCloud(session);else if(cloudUser){cloudUser=null;cloudReady=false;setCloudStatus('เชื่อมข้อมูล','ออกจากระบบแล้ว ข้อมูลในเครื่องยังอยู่') }},0))}
+function installApp(){if(installPromptEvent){installPromptEvent.prompt();installPromptEvent.userChoice.then(choice=>{if(choice?.outcome==='accepted')toast('กำลังติดตั้งแอปพัดลมดี');installPromptEvent=null});return}if(window.matchMedia('(display-mode: standalone)').matches||navigator.standalone){toast('ติดตั้งแอปไว้ในโทรศัพท์แล้ว');return}toast('ใน Chrome แตะ ⋮ แล้วเลือก “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”')}
+function registerServiceWorker(){if(!('serviceWorker'in navigator))return;navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('PWA service worker unavailable',e))}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPromptEvent=e});window.addEventListener('appinstalled',()=>{installPromptEvent=null;toast('ติดตั้งแอปพัดลมดีเรียบร้อยแล้ว')});window.addEventListener('online',()=>{if(cloudUser)queueCloudSave()});
+normalizeStockAndListings();save();renderAll();showSharedPage();registerServiceWorker();initCloud();
 </script>
 </body>
 </html>
