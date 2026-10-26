@@ -1,9 +1,9 @@
 <!doctype html>
-<!-- Fan Shop v1.19 | fixed menu startup syntax error; private, data-grounded shop assistant. -->
+<!-- Fan Shop v1.20 | mobile menu interaction and stray tab fix; private, data-grounded shop assistant. -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="1.19">
+<meta name="app-version" content="1.20">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07583e">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -299,6 +299,18 @@ body>*:not(#warrantyModal){display:none!important}
 .ai-assistant{max-width:920px;margin:0 auto}.ai-note{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border:1px solid #cfe6d7;border-radius:14px;background:#f0faf4;color:#285d43;font-size:13px;line-height:1.65}.ai-note span{font-size:20px}.ai-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}.ai-threshold{display:flex;align-items:center;gap:8px;color:#52635b;font-size:12px;font-weight:700}.ai-threshold input{width:76px;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}.ai-suggestions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.ai-suggestions button{border:1px solid #cfe6d7;border-radius:999px;background:#fff;color:#176c4f;padding:9px 13px;font-size:12px;font-weight:750}.ai-suggestions button:hover{background:#eaf7ef}.ai-chat{display:flex;flex-direction:column;gap:11px;min-height:250px;max-height:52vh;overflow:auto;padding:16px;background:#f8fbf8;border:1px solid #e3ece5;border-radius:16px}.ai-bubble{max-width:min(92%,720px);padding:12px 14px;border-radius:15px;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}.ai-bubble.assistant{align-self:flex-start;background:#fff;border:1px solid #e3ece5;color:#20372b}.ai-bubble.user{align-self:flex-end;background:#087b52;color:#fff}.ai-chat-form{display:flex;gap:9px;margin-top:11px}.ai-chat-form input{flex:1;min-width:0;border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:#fff}.ai-chat-form button{white-space:nowrap}.ai-empty-hint{color:var(--muted);font-size:12px;margin:10px 2px 0;line-height:1.6}
 @media(max-width:680px){.ai-assistant{margin:0}.ai-note{font-size:12px;padding:11px}.ai-chat{min-height:230px;max-height:48vh;padding:11px}.ai-bubble{max-width:96%;font-size:13px;padding:11px 12px}.ai-chat-form{position:sticky;bottom:76px;background:var(--paper);padding:6px 0}.ai-chat-form input{font-size:14px}.ai-chat-form button{padding:10px 12px}.ai-threshold{width:100%}.mobile-nav button{min-width:0;flex:1;font-size:8px}.mobile-nav{gap:0}}
 </style>
+
+<style id="mobile-menu-fix-v1-20">
+@media(max-width:680px){
+ .mobile-head{position:relative!important;z-index:112!important}
+ .mobile-head .hamburger{position:relative!important;z-index:114!important;pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+ .sidebar{position:fixed!important;top:0!important;bottom:0!important;left:0!important;width:min(82vw,290px)!important;transform:translateX(calc(-100% - 20px))!important;visibility:hidden!important;pointer-events:none!important;z-index:113!important;transition:transform .22s ease,visibility .22s ease!important;overflow-y:auto!important}
+ body.menu-open .sidebar{display:flex!important;transform:translateX(0)!important;visibility:visible!important;pointer-events:auto!important}
+ .menu-backdrop{display:none!important;appearance:none!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;margin:0!important;padding:0!important;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;z-index:111!important}
+ body.menu-open .menu-backdrop{display:block!important;background:rgba(12,35,25,.35)!important}
+ body.menu-open:after{display:none!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -323,7 +335,7 @@ body>*:not(#warrantyModal){display:none!important}
 </aside>
 <button type="button" class="menu-backdrop" id="menuBackdrop" aria-label="ปิดเมนู" onclick="closeMenu()"></button>
 <main class="main">
-  <div class="mobile-head"><button class="hamburger" type="button" aria-label="เปิดเมนู" onclick="toggleMenu()">☰</button><div class="mobile-brand"><div class="brandmark fan-brandmark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 29C21 21 21 8 30 3c8-4 17 3 14 12-2 6-8 10-14 14Zm5 4c8-9 21-9 26 0 4 8-3 17-12 14-6-2-10-8-14-14ZM30 36c9 8 9 21 0 26-8 4-17-3-14-12 2-6 8-10 14-14Z" fill="currentColor"/></svg></div><div><strong>พัดลมดี <em>ป่าบอน</em></strong><small>ซ่อม • ประกอบ • ขาย • รับประกัน</small></div></div></div>
+  <div class="mobile-head"><button id="menuToggle" class="hamburger" type="button" aria-label="เปิดเมนู" aria-controls="sideNav" aria-expanded="false">☰</button><div class="mobile-brand"><div class="brandmark fan-brandmark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 29C21 21 21 8 30 3c8-4 17 3 14 12-2 6-8 10-14 14Zm5 4c8-9 21-9 26 0 4 8-3 17-12 14-6-2-10-8-14-14ZM30 36c9 8 9 21 0 26-8 4-17-3-14-12 2-6 8-10 14-14Z" fill="currentColor"/></svg></div><div><strong>พัดลมดี <em>ป่าบอน</em></strong><small>ซ่อม • ประกอบ • ขาย • รับประกัน</small></div></div></div>
   <div class="topbar"><div class="crumb">ระบบจัดการร้าน / <b id="crumbName">ภาพรวม</b></div><div class="account"><div class="avatar">จ</div><div><span>เจ้าของร้าน</span><small>ระบบบันทึกงานพัดลม</small></div></div></div>
   <section class="page-section active" id="page-overview">
     <div class="hero-banner">
@@ -480,8 +492,8 @@ function repairWarrantyEnd(r){const start=repairWarrantyStart(r);return start?pl
 function warrantyDaysLeft(end){if(!end)return null;return Math.ceil((new Date(end+'T12:00:00')-new Date(today+'T12:00:00'))/86400000)}
 function statusBadge(s){return isActive(s)?'<span class="badge badge-green">● อยู่ในประกัน</span>':'<span class="badge badge-gray">หมดประกัน</span>'}
 function initials(name){return (name||'?').trim().slice(0,1)}
-function closeMenu(){document.body.classList.remove('menu-open')}
-function toggleMenu(){document.body.classList.toggle('menu-open')}
+function closeMenu(){document.body.classList.remove('menu-open');document.getElementById('menuToggle')?.setAttribute('aria-expanded','false')}
+function toggleMenu(){const open=!document.body.classList.contains('menu-open');document.body.classList.toggle('menu-open',open);document.getElementById('menuToggle')?.setAttribute('aria-expanded',String(open))}
 function showPage(name,options={}){
  closeMenu();
  const current=document.querySelector('.page-section.active')?.id?.replace('page-','');
@@ -631,6 +643,7 @@ async function connectCloud(){if(!supabaseClient){toast('โหลดระบ�
 async function initCloud(){if(!supabaseClient){setCloudStatus('เชื่อมข้อมูล','โหลด Supabase SDK ไม่สำเร็จ');return}try{const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data.session)await hydrateCloud(data.session);else setCloudStatus('เชื่อมข้อมูล','กดเพื่อเข้าสู่ระบบ GitHub และซิงก์ข้อมูล')}catch(e){console.warn('Supabase session check failed',e);setCloudStatus('เชื่อมข้อมูล','ตรวจสอบสถานะ Supabase ไม่สำเร็จ')}supabaseClient.auth.onAuthStateChange((_event,session)=>setTimeout(()=>{if(session)hydrateCloud(session);else if(cloudUser){cloudUser=null;cloudReady=false;setCloudStatus('เชื่อมข้อมูล','ออกจากระบบแล้ว ข้อมูลในเครื่องยังอยู่') }},0))}
 function registerServiceWorker(){if(!('serviceWorker'in navigator))return;navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('PWA service worker unavailable',e))}
 window.addEventListener('online',()=>{if(cloudUser)queueCloudSave()});
+document.getElementById('menuToggle')?.addEventListener('click',toggleMenu);
 normalizeStockAndListings();save();renderAll();showSharedPage();registerServiceWorker();initCloud();
 </script>
 </body>
