@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fan-shop-pwa-v1.26';
+const CACHE_NAME = 'fan-shop-pwa-v1.27';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './supabase.min.js',
   './fan-icon-192.png', './fan-icon-512.png',
